@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">            <div class = "header">
+                <h1>CodingDojo Wall</h1>
+                <p> Welcome {{user}}</p>
+                <a href="/logout">Log Out</a>
+                <br>
+            </div>
+        <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <meta http-equiv="X-UA-Compatible" content="ie=edge">
+                <title>The Wall</title>
+        </head>
+        <body>
+
+
+            <form action='/newpost' method='POST'>
+              Post a message:
+              <input type="text" name="message" id="message">
+             <br>
+              <input type="submit" value="Post a message">
+            </form>
+
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    {% for message in messages %}
+                        <p class="alert">{{message}}</p>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            {% if all_messages %}
+                {% for post in all_messages %}
+                    <p class="messager">{{post["first_name"]}} - {{post["created_at"]}}</p>
+                    <p class="message">{{post["content"]}}</p>
+                    {% for subpost in all_comments %}
+                        {% if post["postid"] == subpost["posts_id"]%}
+                            <p class="commenter">{{subpost["first_name"]}} - {{subpost["created_at"]}}</p>
+                            <p class="comment">{{subpost["content"]}}</p>
+                        {% endif %}
+                    {% endfor %}
+                    <form action='/newcomment/{{post["postid"]}}' method='POST'>
+                        Post a comment:
+                        <input type="text" name="postid" id="comment">
+                        <br>
+                        <input type="submit" value="Post a comment ">                    
+                    </form>  
+                {% endfor %}
+
+            {% endif %}
+
+
+        </body>
+</html>
+        
